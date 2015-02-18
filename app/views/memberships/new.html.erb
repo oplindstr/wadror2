@@ -1,0 +1,6 @@
+<h1>Join a club</h1>
+<% if @beer_clubs.empty? %>
+    <p>You are already a member of all clubs!</p>
+<% else %>
+    <%= render 'form' %>
+<%end%>

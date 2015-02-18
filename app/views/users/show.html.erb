@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>
+    <%= @user.username %>
+
+    <% if @user.disabled %>
+      <label class='label label-info'>account frozen</label>
+    <% end %>
+  </strong>
+</p>
+
+<%= link_to activity_toggle_label_name(@user), toggle_disabled_user_path(@user), method: :post, class:'btn btn-danger' if admin and current_user.id != @user.id %>
+
+<p>has made <%= @ratings.count %> ratings, average: <%= round(@average) %></p>
+
+<% if !@ratings.empty? %>
+
+<p>Favorite style: <%= @favorite_style %>
+
+<p>Favorite brewery: <%= @favorite_brewery %>
+
+<%end %>
+
+<p>member of
+  <% @beer_clubs.each do |club| %>
+  <%= link_to club , club %>
+  <% end %>
+</p>
+
+<p><strong>ratings</strong></p>
+
+<% @ratings.each do |rating| %>
+  <li> 
+  	<%= rating %> 
+  	<% if @user == current_user %>
+  	<%= link_to 'delete', rating, method: :delete, data: { confirm: 'Are you sure?' } %>
+     <% end %>
+  	 </li>
+<% end %>
+<p></p>
+
+<% if @user == current_user %>
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Delete account', @user, method: :delete, data: { confirm: 'Are you sure?' } %> |
+<% end %>
+<%= link_to 'Back', users_path %>
