@@ -1,7 +1,7 @@
 class Beer < ActiveRecord::Base
   include RatingAverage
   include Enumerable
-  belongs_to :brewery
+  belongs_to :brewery, touch: true
   belongs_to :style
   validates :name, presence: true
   validates :style_id, presence: true

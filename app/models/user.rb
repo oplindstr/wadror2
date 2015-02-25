@@ -14,6 +14,12 @@ class User < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :beer_clubs, -> { uniq }, through: :memberships
 
+  has_many :confirmed, -> { where confirmed:true }, class_name: "Membership"
+  has_many :unconfirmed, -> { where confirmed:[nil,false] }, class_name: "Membership"
+
+  has_many :confirmed_clubs, class_name: "BeerClub", through: :confirmed, source: :beer_club
+  has_many :unconfirmed_clubs, class_name: "BeerClub", through: :unconfirmed, source: :beer_club
+
   def to_s
     self.username
   end
@@ -42,5 +48,9 @@ class User < ActiveRecord::Base
   def ratings_count
     return nil if ratings.empty?
     ratings.count
+  end
+
+  def get_membership(beer_club)
+    membership = self.memberships.where("beer_club_id = ?", beer_club.id).first
   end
 end

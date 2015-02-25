@@ -1,23 +1,32 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong><%= @beer_club %></strong>
+  <strong><h2><%= @beer_club %></h2></strong>
 </p>
 
 <p>
   <strong>Founded: <%= @beer_club.founded %></strong>
 </p>
 
-<p><strong>Members:</strong></p>
+<p><h1>Members:</h1></p>
 
-<% if not @users.nil? %>
-<ul>
-  <% @beer_club.users.each do |user| %>
-    <li><%= link_to user, user %></li>
-  <% end %>
-</ul>
+<% if !@confirmed.nil? and !@confirmed.empty?%>
+	<ul>
+	  <% @confirmed.each do |user| %>
+	    <li><%= link_to user.username, user %></li>
+	  <% end %>
+	</ul>
 <% else %>
-  <p>No members yet</p>
+  <p>No confirmed members</p>
+<% end %>
+
+<% if !@unconfirmed.nil? and !@unconfirmed.empty? and @confirmed.include? current_user%>
+<p><h1>Outstanding applications</h1></p>
+	<ul>
+	  <% @unconfirmed.each do |user| %>
+	    <li><%= link_to user.username, user %> <%= link_to "confirm", activate_membership_path(user.get_membership(@beer_club).id), method: :post, class: "btn btn-primary" %></li>
+	  <% end %>
+	</ul>
 <% end %>
 
 <% if current_user %>
@@ -26,6 +35,7 @@
 		<%= form_for(@membership) do |f| %>
 		  <%= f.hidden_field :beer_club_id, :value => @beer_club.id %>
 		  <%= f.hidden_field :user_id, :value => current_user.id %>
+		  <%= f.hidden_field :confirmed, :value => false %>
 		  <%= f.submit value:"join the club" %>
 		<% end %>
 	<% else %>

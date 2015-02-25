@@ -1,5 +1,5 @@
 class MembershipsController < ApplicationController
-  before_action :set_membership, only: [:show, :edit, :update]
+  before_action :set_membership, only: [:show, :edit, :update, :activate]
 
   # GET /memberships
   # GET /memberships.json
@@ -32,7 +32,7 @@ class MembershipsController < ApplicationController
 
     respond_to do |format|
       if @membership.save
-        format.html { redirect_to @beer_club, notice: 'Joined club successfully!.' }
+        format.html { redirect_to @beer_club, notice: 'Join request sent!.' }
         format.json { render action: 'show', status: :created, location: @membership }
       else
         format.html { render action: 'new' }
@@ -53,6 +53,12 @@ class MembershipsController < ApplicationController
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def activate
+    @membership.confirmed = true
+    @membership.save if @membership.beer_club.users.include? current_user
+    redirect_to @membership.beer_club, notice: "member confirmed successfully!"
   end
 
   # DELETE /memberships/1
@@ -79,6 +85,6 @@ class MembershipsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def membership_params
-      params.require(:membership).permit(:beer_club_id, :user_id)
+      params.require(:membership).permit(:beer_club_id, :user_id, :confirmed)
     end
 end

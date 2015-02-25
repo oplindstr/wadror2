@@ -1,13 +1,29 @@
 class BreweriesController < ApplicationController
   before_action :set_brewery, only: [:show, :edit, :update, :destroy, :toggle_activity]
-  before_action :ensure_that_signed_in, except: [:index, :show]
+  before_action :ensure_that_signed_in, except: [:index, :show, :list]
   before_action :ensure_that_admin, only: [:destroy]
+  before_action :expire, only: [:create, :update, :destroy]
+  before_action :skip_if_cached, only: [:index]
 
   # GET /breweries
   # GET /breweries.json
   def index
+    @breweries = Brewery.all
     @active_breweries = Brewery.active
     @retired_breweries = Brewery.retired
+
+    @order = params[:order] || 'name'
+
+    @active_breweries = order(@active_breweries)
+    @retired_breweries= order(@retired_breweries)
+    if session[:ordered].nil?
+      session[:ordered] = 1
+    else
+      session[:ordered] = nil
+    end
+  end
+
+  def list
   end
 
   def toggle_activity
@@ -88,5 +104,32 @@ class BreweriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def brewery_params
       params.require(:brewery).permit(:name, :year, :active)
+    end
+
+    def order(list)
+      order = params[:order] || 'name'
+
+      if session[:ordered].nil?
+        list = case order
+        when 'name' then list.sort_by{ |b| b.name }
+        when 'year' then list.sort_by{ |b| b.year }
+        end
+      else
+        list = case order
+        when 'name' then list.sort_by{ |b| b.name }.reverse
+        when 'year' then list.sort_by{ |b| b.year }.reverse
+        end
+      end
+      return list
+    end
+
+    def expire
+      expire_fragment('brewerylist-name')
+      expire_fragment('brewerylist-year')
+    end
+
+    def skip_if_cached
+      @order = params[:order] || 'name'
+      return render :index if fragment_exist?("brewerylist-#{@order}")
     end
 end

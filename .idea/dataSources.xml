@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="4293519663">
+  <component name="DataSourceManagerImpl" format="xml" hash="821677893">
     <data-source source="LOCAL" name="Rails ratebeer: development" uuid="1c752074-5080-4ca3-8c2b-b9dc10da18dc">
       <driver-ref>sqlite.xerial</driver-ref>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db/development.sqlite3</jdbc-url>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Rails ratebeer: test" uuid="49e0fc71-69f3-4ae9-82e6-ea6596b61534">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db/test.sqlite3</jdbc-url>
       <libraries />
     </data-source>
   </component>

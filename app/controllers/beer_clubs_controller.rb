@@ -12,7 +12,8 @@ class BeerClubsController < ApplicationController
   # GET /beer_clubs/1
   # GET /beer_clubs/1.json
   def show
-    @users = @beer_club.users
+    @confirmed = @beer_club.confirmed_users
+    @unconfirmed = @beer_club.unconfirmed_users
     @membership = Membership.new
     @existing_memberships = Membership.find_by_sql("Select * from Memberships where beer_club_id = #{@beer_club.id} and user_id = #{current_user.id}")
     @membership = @existing_memberships.first if !@existing_memberships.empty?
@@ -31,9 +32,11 @@ class BeerClubsController < ApplicationController
   # POST /beer_clubs.json
   def create
     @beer_club = BeerClub.new(beer_club_params)
-
+    
     respond_to do |format|
       if @beer_club.save
+        @membership = Membership.new({"beer_club_id"=>@beer_club.id, "user_id" => current_user.id, "confirmed" => true})
+        @membership.save
         format.html { redirect_to @beer_club, notice: 'Beer club was successfully created.' }
         format.json { render action: 'show', status: :created, location: @beer_club }
       else

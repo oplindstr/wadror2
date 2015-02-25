@@ -22,11 +22,31 @@
 
 <%end %>
 
-<p>member of
-  <% @beer_clubs.each do |club| %>
-  <%= link_to club , club %>
-  <% end %>
-</p>
+<h2>Beer clubs</h2>
+
+<% if !@confirmed.nil? and !@confirmed.empty?%>
+
+  <p>member of
+    <% @confirmed.each do |club| %>
+    <li>
+      <%= link_to club , club %>
+    </li>
+    <% end %>
+  </p>
+
+<% end %>
+
+<% if !@unconfirmed.nil? and !@unconfirmed.empty?%>
+
+  <p>applied membership of
+    <% @unconfirmed.each do |club| %>
+    <li>
+      <%= link_to club , club %>
+    </li>
+    <% end %>
+  </p>
+
+<% end %>
 
 <p><strong>ratings</strong></p>
 

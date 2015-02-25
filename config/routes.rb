@@ -22,6 +22,16 @@ Ratebeer::Application.routes.draw do
 
   get 'signup', to: 'users#new'
 
+  get 'beerlist', to:'beers#list'
+
+  get 'ngbeerlist', to:'beers#nglist'
+
+  get 'brewerylist', to:'breweries#list'
+
+  resources :memberships do
+    post 'activate', on: :member
+  end
+
   resource :session, only: [:new, :create, :delete]
 
   get 'signin', to: 'sessions#new'

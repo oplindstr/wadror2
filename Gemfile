@@ -27,6 +27,10 @@ end
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
+gem 'whenever', :require => false
+
+gem 'rack-mini-profiler'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -41,6 +45,8 @@ gem 'jquery-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+
+gem 'jquery-turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
@@ -72,12 +78,20 @@ end
 # Readline
 gem 'rb-readline'
 
+gem 'sidekiq'
+
+gem 'sinatra', require: false
+
+gem 'slim'
+
 group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'launchy'
   gem 'simplecov', require: false
   gem 'webmock'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 gem 'httparty'

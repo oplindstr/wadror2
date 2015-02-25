@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.includes(:ratings, :beers).all
   end
 
   # GET /users/1
@@ -18,6 +18,8 @@ class UsersController < ApplicationController
     @beer_clubs = @user.beer_clubs
     @favorite_style = @user.favorite_style
     @favorite_brewery = @user.favorite_brewery
+    @confirmed = @user.confirmed_clubs
+    @unconfirmed = @user.unconfirmed_clubs
   end
 
   def toggle_disabled
